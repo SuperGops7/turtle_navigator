@@ -2,13 +2,14 @@
 
 ## Overview
 
-This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle navigates to random waypoints within the Turtlesim environment, adjusting its orientation and speed dynamically to reach each target.
+This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle navigates to random waypoints and avoids obstacles represented by additional turtles in the environment.
 
 ## Features
 
 - Autonomous waypoint navigation
-- Dynamic parameter tuning for linear and angular speed
-- Subscription to pose data for real-time navigation feedback
+- Dynamic speed control using ROS2 parameters
+- Obstacle avoidance with real-time feedback
+- Modular design with separate navigation and obstacle management
 
 ## Installation
 
@@ -43,9 +44,25 @@ This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle
 
 ## Customization
 
-- Change the turtle’s linear and angular speed dynamically with ROS2 parameters:
+- Adjust turtle speed:
     ```bash
     ros2 param set /move_turtle linear_speed 1.0
     ros2 param set /move_turtle angular_speed 2.0
     ```
 
+- Add obstacles in `turtle_obstacle_manager.py` by defining additional turtles:
+    ```python
+    self.obstacles = [
+        {'name': 'turtle2', 'position': [1.0, 7.0]},
+        {'name': 'turtle3', 'position': [7.0, 2.0]}
+    ]
+    ```
+
+## Class Overview
+
+- **`MoveTurtle`**: Manages turtle navigation and obstacle avoidance.
+- **`TurtleObstacleManager`**: Handles spawning and tracking of obstacle turtles.
+
+## Future Improvements
+
+- Add dynamic obstacles or implement path planning for smarter navigation.
