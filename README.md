@@ -1,5 +1,9 @@
 # Turtle Navigator - ROS2 Autonomous Navigation
 
+![Python](https://img.shields.io/badge/python-3.10-blue.svg)
+![Ubuntu](https://img.shields.io/badge/ubuntu-22.04-orange.svg)
+![ROS](https://img.shields.io/badge/ros-humble-blue.svg)
+
 ## Overview
 
 This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle navigates to random waypoints and avoids obstacles represented by additional turtles in the environment.
