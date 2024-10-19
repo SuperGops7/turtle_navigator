@@ -20,7 +20,7 @@ This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle
 1. Clone this repository into your ROS2 workspace:
     ```bash
     cd ~/ros2_ws/src
-    git clone <your-repo-url>
+    git clone https://github.com/SuperGops7/turtle_navigator.git
     ```
 
 2. Build the package:
