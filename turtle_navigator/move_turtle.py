@@ -9,23 +9,26 @@ from turtle_navigator import TurtleObstacleManager
 import math
 import random
 
+
 class MoveTurtle(Node, TurtleObstacleManager):
     def __init__(self):
-        super().__init__('move_turtle')
+        super().__init__("move_turtle")
         TurtleObstacleManager.__init__(self)
         # Publisher to control the turtle's velocity
-        self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
+        self.publisher_ = self.create_publisher(Twist, "/turtle1/cmd_vel", 10)
         # Subscriber to get the turtle's current pose
-        self.pose_subscriber = self.create_subscription(Pose, '/turtle1/pose', self.pose_callback, 10)
+        self.pose_subscriber = self.create_subscription(
+            Pose, "/turtle1/pose", self.pose_callback, 10
+        )
         # Timer to call the move_callback function periodically
         self.timer = self.create_timer(0.1, self.move_callback)
-        
+
         self.current_pose = Pose()
         self.target_pose = [5.0, 5.0]  # Initial target coordinates (x, y)
 
         # Declare parameters for dynamic adjustment
-        self.declare_parameter('linear_speed', 2.0)
-        self.declare_parameter('angular_speed', 4.0)
+        self.declare_parameter("linear_speed", 2.0)
+        self.declare_parameter("angular_speed", 4.0)
 
         self.get_logger().info("Turtle Navigator node has been started.")
 
@@ -41,9 +44,11 @@ class MoveTurtle(Node, TurtleObstacleManager):
                 msg = self.get_latest_pose(pose_topic)
                 obstacle_positions.append((msg.x, msg.y))
             except Exception as e:
-                self.get_logger().warn(f"Could not retrieve pose for {obstacle['name']}: {e}")
+                self.get_logger().warn(
+                    f"Could not retrieve pose for {obstacle['name']}: {e}"
+                )
         return obstacle_positions
-    
+
     def get_latest_pose(self, topic_name):
         """Retrieve the latest pose from the given topic."""
         return next(self.create_subscription(Pose, topic_name, lambda msg: msg, 10))
@@ -52,13 +57,19 @@ class MoveTurtle(Node, TurtleObstacleManager):
         msg = Twist()
 
         # Retrieve parameters
-        linear_speed = self.get_parameter('linear_speed').get_parameter_value().double_value
-        angular_speed = self.get_parameter('angular_speed').get_parameter_value().double_value
+        linear_speed = (
+            self.get_parameter("linear_speed").get_parameter_value().double_value
+        )
+        angular_speed = (
+            self.get_parameter("angular_speed").get_parameter_value().double_value
+        )
 
         # Calculate the distance to the target
         distance = self.calculate_distance(
-            self.current_pose.x, self.current_pose.y, 
-            self.target_pose[0], self.target_pose[1]
+            self.current_pose.x,
+            self.current_pose.y,
+            self.target_pose[0],
+            self.target_pose[1],
         )
 
         self.get_logger().info(f"Distance to target: {distance}")
@@ -72,11 +83,13 @@ class MoveTurtle(Node, TurtleObstacleManager):
             # Calculate the angle to the target
             angle_to_target = math.atan2(
                 self.target_pose[1] - self.current_pose.y,
-                self.target_pose[0] - self.current_pose.x
+                self.target_pose[0] - self.current_pose.x,
             )
 
             # Calculate the difference between current orientation and target angle
-            angle_difference = self.normalize_angle(angle_to_target - self.current_pose.theta)
+            angle_difference = self.normalize_angle(
+                angle_to_target - self.current_pose.theta
+            )
 
             self.get_logger().info(f"Angle difference: {angle_difference}")
 
@@ -85,7 +98,9 @@ class MoveTurtle(Node, TurtleObstacleManager):
             msg.linear.x = linear_speed * distance
 
             # Log the velocity command
-            self.get_logger().info(f"Publishing velocity - Linear: {msg.linear.x}, Angular: {msg.angular.z}")
+            self.get_logger().info(
+                f"Publishing velocity - Linear: {msg.linear.x}, Angular: {msg.angular.z}"
+            )
         else:
             self.get_logger().info(f"Reached target at {self.target_pose}")
             self.target_pose = self.get_random_target()
@@ -120,10 +135,16 @@ class MoveTurtle(Node, TurtleObstacleManager):
         obstacle_positions = self.get_obstacle_positions()
         for obs_x, obs_y in obstacle_positions:
             # If the main turtle is close to the obstacle (within 1 unit)
-            if self.calculate_distance(self.current_pose.x, self.current_pose.y, obs_x, obs_y) < 1.0:
+            if (
+                self.calculate_distance(
+                    self.current_pose.x, self.current_pose.y, obs_x, obs_y
+                )
+                < 1.0
+            ):
                 return True
         return False
-    
+
+
 def main(args=None):
     rclpy.init(args=args)
     node = MoveTurtle()
@@ -131,5 +152,6 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
