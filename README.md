@@ -1,4 +1,4 @@
-# Turtle Navigator - ROS2 Autonomous Navigation with Turtlesim
+# Turtle Navigator - ROS2 Autonomous Navigation
 
 ## Overview
 
