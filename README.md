@@ -15,6 +15,11 @@ This ROS2 package demonstrates autonomous navigation using Turtlesim. The turtle
 - Obstacle avoidance with real-time feedback
 - Modular design with separate navigation and obstacle management
 
+## Demo
+
+![Turtle Navigator Demo](/demo/turtle_nav.mp4)
+
+
 ## Installation
 
 1. Clone this repository into your ROS2 workspace:
